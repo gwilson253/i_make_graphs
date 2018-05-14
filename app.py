@@ -23,9 +23,18 @@ def choropleth_graph():
 
 @app.route('/data/line_graph')
 def data_line_graph():
+    x = [_ for _ in range(-10, 11)]
+    y = [sin(_) * 100 for _ in x]
+    data = []
+    for a, b in zip(x, y):
+        data.append({'x': a, 'y': b})
+    return json.dumps(data)
+
+@app.route('/data/line_graph_v2')
+def data_line_graph_v2():
     data = {}
-    data['x'] = [_ for _ in range(-10, 11)]
-    data['y'] = [sin(_) * 100 for _ in data['x']]
+    data["x"] = [_ for _ in range(-10, 11)]
+    data["y"] = [sin(_) * 100 for _ in data["x"]]
     return json.dumps(data)
 
 if __name__ == '__main__':
