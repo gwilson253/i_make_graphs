@@ -6,4 +6,5 @@
 
 {% block scripts %}
 {{ super() }}
+<script src="{{ url_for('static', filename='js/line_graph.js', _external=True) }}"></script>
 {% endblock %}
