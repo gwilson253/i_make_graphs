@@ -17,6 +17,7 @@ d3.queue()
   .await(make_graph);
 
 function make_graph(error, data) {
+  // get arrays
   var x = [];
   var y = [];
 
