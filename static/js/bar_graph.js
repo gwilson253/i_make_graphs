@@ -1,5 +1,5 @@
 d3.queue()
-  .defer(d3.json, "data/bar_chart")
+  .defer(d3.json, "data/bar_graph")
   .await(make_graph);
 
 function make_graph(error, data) {
@@ -13,7 +13,7 @@ function make_graph(error, data) {
   for (var d in data) {
     series.push(data[d]["x"]);
     values.push(data[d]["y"]);
-  }
+  };
 
   // define the graph dimensions
   var margins = {
@@ -23,18 +23,46 @@ function make_graph(error, data) {
     left: 50
   };
 
-  height = 500 - margins.top - margins.bottom;
-  width = 1000 - margins.right - margins.left;
+  var height = 500 - margins.top - margins.bottom;
+  var width = 1000 - margins.right - margins.left;
 
   // x scale
-  x_scale = d3.scaleBand
-  .domain(data.map function(d) { return d["x"]; })
-  .range(0, width);
+  var x_scale = d3.scaleBand()
+  .range([0, width])
+  .domain(data.map(function(d) { return d["x"]; }))
+  .padding(0.1);
 
   // y scale
-  y_scale = d3.scaleLinear
-  .domain(d3.min(values), d3.max(values))
-  .range(height, 0);
+  var y_scale = d3.scaleLinear()
+  .range([height, 0])
+  .domain([d3.min(values), d3.max(values)]);
 
-  // define bars (?)
+  // Add an SVG element with the desired dimensions and margin.
+  var graph = d3.select("#graph").append("svg")
+        .attr("width", width + margins.left + margins.right)
+        .attr("height", height + margins.top + margins.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+        ;
+
+  // Add the x-axis.
+  graph.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x_scale));
+
+  // Add the y-axis to the left
+  graph.append("g")
+        .attr("class", "y axis")
+        .call(d3.axisLeft(y_scale));
+
+  // Add bars tot he graph
+  graph.selectAll(".bar")
+    .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x_scale(d.x); })
+      .attr("y", function(d) { return y_scale(d.y); })
+      .attr("width", x_scale.bandwidth())
+      .attr("height", function(d) { return height - y_scale(d.y); });
 };

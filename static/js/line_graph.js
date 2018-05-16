@@ -1,4 +1,4 @@
-// read data into console
+// read data into console for testing
 var x_test = d3.json("data/line_graph", function(data) {
     return x = data["x"];
 });
@@ -17,6 +17,9 @@ d3.queue()
   .await(make_graph);
 
 function make_graph(error, data) {
+  // handle errors
+  if(error) throw error;
+
   // get arrays
   var x = [];
   var y = [];
@@ -73,8 +76,4 @@ function make_graph(error, data) {
        .datum(data) // 10. Binds data to the line
        .attr("class", "line") // Assign a class for styling
        .attr("d", line); // 11. Calls the line generator)
-
-  d3.select("path.line")
-   .attr("fill", "none")
-   .attr("stroke", "#000");
 };
