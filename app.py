@@ -30,11 +30,13 @@ def data_line_graph():
         data.append({'x': a, 'y': b})
     return json.dumps(data)
 
-@app.route('/data/line_graph_v2')
-def data_line_graph_v2():
-    data = {}
-    data["x"] = [_ for _ in range(-10, 11)]
-    data["y"] = [sin(_) * 100 for _ in data["x"]]
+@app.route('/data/bar_graph')
+def data_bar_graph():
+    data = []
+    x = ['A', 'B', 'C', 'D', 'E', 'F']
+    y = [_ for _ in range(100, 700, 100)]
+    for a, b in zip(x, y):
+        data.append({'x': a, 'y': b})
     return json.dumps(data)
 
 if __name__ == '__main__':
